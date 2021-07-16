@@ -1,0 +1,17 @@
+server:
+  global:
+    scrape_interval: 15s
+    evaluation_interval: 15s
+
+serverFiles:
+  alerting_rules.yml: 
+    groups:
+      - name: Flask
+        rules:
+          - alert: Flask
+            expr: kube_deployment_status_replicas_unavailable {deployment="flask-deployment"} > 0
+            for: 15s
+            labels:
+              severity: page
+            annotations:
+              summary: '{{ $labels.deployment }} is not OK!'
